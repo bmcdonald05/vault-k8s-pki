@@ -1,0 +1,44 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app1
+  labels:
+    app: app1
+spec:
+  selector:
+    matchLabels:
+      app: app1
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        vault.hashicorp.com/namespace: "Demo"
+        vault.hashicorp.com/auth-path: "auth/minikube"
+        vault.hashicorp.com/role: "role1"
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-inject-secret-ca.pem: "pki-short/issue/app1"
+        vault.hashicorp.com/agent-inject-perms-ca.pem: "0644"
+        vault.hashicorp.com/agent-inject-template-ca.pem: |
+          {{- with secret "pki-short/issue/app1" "common_name=app1.sandbox.mcdevops.dev" -}}
+          {{ .Data.issuing_ca }}
+          {{- end -}}
+        vault.hashicorp.com/agent-inject-secret-cert.crt: "pki-short/issue/app1"
+        vault.hashicorp.com/agent-inject-perms-cert.crt: "0640"
+        vault.hashicorp.com/agent-inject-template-cert.crt: |
+          {{- with secret "pki-short/issue/app1" "common_name=app1.sandbox.mcdevops.dev" -}}
+          {{ .Data.certificate }}
+          {{- end -}}
+        vault.hashicorp.com/agent-inject-secret-app1.key: "pki-short/issue/app1"
+        vault.hashicorp.com/agent-inject-perms-app1.key: "0600"
+        vault.hashicorp.com/agent-inject-template-app1.key: |
+          {{- with secret "pki-short/issue/app1" "common_name=app1.sandbox.mcdevops.dev" -}}
+          {{ .Data.private_key }}
+          {{- end -}}
+      labels:
+        app: app1
+    spec:
+      serviceAccountName: app-sa
+      containers:
+        - name: app
+          image: burtlo/devwebapp-ruby:k8s

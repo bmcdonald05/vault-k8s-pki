@@ -1,0 +1,7 @@
+k8s_host = "<YOUR_$KUBE_HOST_VALUE>"
+
+k8s_ca_cert = <<EOT
+<YOUR_$KUBE_CA_CERT_VALUE>
+EOT
+
+token_review_jwt = "<YOUR_$TOKEN_REVIEW_JWT_VALUE>"
