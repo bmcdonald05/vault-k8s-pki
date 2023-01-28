@@ -19,6 +19,7 @@ locals {
   default_60d_in_sec = 5184000
   default_1hr_in_sec = 3600
 }
+
 #################################
 ############ K8s Items ##########
 #################################
@@ -29,7 +30,7 @@ resource "vault_auth_backend" "kubernetes" {
 
 resource "vault_kubernetes_auth_backend_config" "minikube" {
   backend = vault_auth_backend.kubernetes.path
-  # disable_iss_validation = false #Work around as this option is deprecated but gets set to 'true' sometimes via older Vault provider versions
+  # disable_iss_validation = false #Work around as this option is deprecated but gets set to 'true' sometimes on older Vault provider versions
   kubernetes_host    = var.k8s_host
   kubernetes_ca_cert = var.k8s_ca_cert
   token_reviewer_jwt = var.token_review_jwt

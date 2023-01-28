@@ -6,10 +6,10 @@ metadata:
   labels:
     app: app1
   annotations:
+    vault.hashicorp.com/agent-inject: "true"
     vault.hashicorp.com/namespace: "Demo"
     vault.hashicorp.com/auth-path: "auth/minikube"
     vault.hashicorp.com/role: "role1"
-    vault.hashicorp.com/agent-inject: "true"
     vault.hashicorp.com/agent-inject-secret-ca.pem: "pki-short/issue/app1"
     vault.hashicorp.com/agent-inject-perms-ca.pem: "0644"
     vault.hashicorp.com/agent-inject-template-ca.pem: |
